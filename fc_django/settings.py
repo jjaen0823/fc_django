@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import os, json
+import os
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,12 +27,14 @@ secret_file = os.path.join(BASE_DIR, 'secrets.json')
 with open(secret_file, 'r') as f:
     secrets = json.loads(f.read())
 
-def get_secret(setting, secrets=secrets): 
+
+def get_secret(setting, secrets=secrets):
     try:
         return secrets[setting]
     except KeyError:
         error_msg = "Set the {} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret("SECRET_KEY")
@@ -52,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     'fcuser.apps.FcuserConfig',
     'product.apps.ProductConfig',
@@ -73,7 +77,9 @@ ROOT_URLCONF = 'fc_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join('fcuser/templates'),
+                 os.path.join('order/templates'),
+                 os.path.join('product/templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

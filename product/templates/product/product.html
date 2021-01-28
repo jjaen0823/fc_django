@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h1>Product</h1>
+        <a href="{% url 'index' %}">Home</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <table class="table table-light">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Register Date</th>
+                </tr>
+            </thead>
+            <tbody class="text-dark">
+                {% for product in product_list %}
+                <tr>
+                <!--   onclick="location.href='/product/detail/{{ board.id }}'" -->
+                    <th scope="row">{{ product.id }}</th>
+                    <th>{{ product.name }}</th>
+                    <th>{{ product.price|intcomma }} won</th>
+                    <th>{{ product.stock }}</th>
+                    <th>{{ product.register_date|date:'Y.m.d H:i' }}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div><div class="row">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" onclick="location.href='/product/create/'">Write</button>
+    </div>
+</div>
+{% endblock %}

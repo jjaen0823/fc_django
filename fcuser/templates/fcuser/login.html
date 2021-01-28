@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h1>Login</h1>
+        <a href="{% url 'index' %}">Home</a>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-12">
+        {% comment %} <div class="mb-3" >
+                <!-- {{ error }} -->
+                {% if error %}
+                <p style="color:red;">{{ error }}</p>
+                {% endif %}
+        </div> {% endcomment %}
+        <form method="POST" action=".">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" placeholder="{{ field.label }}">
+                </div>
+                {% if field.errors %}
+                    <span style="color: red;">{{ field.errors }}</span>
+                {% endif %}
+            {% endfor %}
+            <!-- {{ forms.as_p }} -->
+            
+            <!-- <div class="mb-3">
+                <label for="username" class="form-label">User Name</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="User name">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div> -->
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+</div>    
+{% endblock %}
+        
+
