@@ -5,6 +5,8 @@ from .forms import RegisterForm, LoginForm
 
 
 # Create your views here.
+
+
 def index(request):
     email = request.session.get('user')
     return render(request, 'fcuser/index.html', {'email': email})

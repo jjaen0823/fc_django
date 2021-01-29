@@ -21,6 +21,7 @@ from fcuser.views import *
 import product.urls
 import order.urls
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
@@ -28,6 +29,4 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('product/', include(product.urls)),
     path('order/', include(order.urls)),
-
-    # path('fcuser/', include(fcuser.urls)),
 ]
