@@ -77,9 +77,7 @@ ROOT_URLCONF = 'fc_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join('fcuser/templates'),
-                 os.path.join('order/templates'),
-                 os.path.join('product/templates'), ],
+        'DIRS': [os.path.join('fcuser/templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

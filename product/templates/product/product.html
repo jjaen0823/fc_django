@@ -22,10 +22,10 @@
             </thead>
             <tbody class="text-dark">
                 {% for product in product_list %}
+                <!-- <tr onclick="location.href='/product/{{ product.id }}'"> -->
                 <tr>
-                <!--   onclick="location.href='/product/detail/{{ board.id }}'" -->
                     <th scope="row">{{ product.id }}</th>
-                    <th>{{ product.name }}</th>
+                    <th ><a href="/product/{{ product.id }}">{{ product.name }}</a></th>
                     <th>{{ product.price|intcomma }} won</th>
                     <th>{{ product.stock }}</th>
                     <th>{{ product.register_date|date:'Y.m.d H:i' }}</th>
@@ -36,7 +36,7 @@
     </div>
 </div><div class="row">
     <div class="col-12">
-        <button type="button" class="btn btn-primary" onclick="location.href='/product/create/'">Write</button>
+        <button type="button" class="btn btn-primary" onclick="location.href='/product/create/'">Create</button>
     </div>
 </div>
 {% endblock %}

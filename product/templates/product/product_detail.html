@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h1>Product</h1>
+        <a href="{% url 'index' %}">Home</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card" style="width: 100%">
+            <div class="card-body"> 
+            <h5 class="card-title">{{ product.name }}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <form method="POST" action="/order/create/">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <!-- {% ifnotequal field.name 'product' %}
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" placeholder="{{ field.label }}">
+                                {% endifnotequal %} -->
+                                {% ifnotequal field.field.widget.input_type 'hidden' %}
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {% endifnotequal %}
+                                <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" 
+                                    name="{{ field.name }}" placeholder="{{ field.label }}" value="{% ifequal field.name 'product' %}{{ product.id }}{% endifequal %}">
+                            </div>
+                            {% if field.errors %}
+                                <span style="color: red;">{{ field.errors }}</span>
+                            {% endif %}
+                        {% endfor %}
+                        <button type="submit" class="btn btn-primary">Order</button>
+                    </form>
+                </li>
+                <li class="list-group-item">Price: {{ product.price|intcomma }} won</li>
+                <li class="list-group-item">Stock: {{ product.stock }}</li>
+                <li class="list-group-item">Register Date: {{ product.register_date|date:'Y.m.d H:i' }}</li>
+                <li class="list-group-item">Description: {{ product.description|safe }}</li>
+            </ul>
+        </div>
+    </div>
+</div><br>
+<div class="row">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" onclick="location.href='/product/'">Back</button>
+    </div>
+</div>
+{% endblock %}

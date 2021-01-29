@@ -19,6 +19,7 @@ from django.urls import path, include
 from fcuser.views import *
 # import fcuser.urls
 import product.urls
+import order.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +27,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('product/', include(product.urls)),
+    path('order/', include(order.urls)),
+
     # path('fcuser/', include(fcuser.urls)),
 ]
