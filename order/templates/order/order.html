@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h1>Order</h1>
+        <a href="{% url 'index' %}">Home</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <table class="table table-light">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Register Date</th>
+                </tr>
+            </thead>
+            <tbody class="text-dark">
+                {% for order in order_list %}
+                <!-- <tr onclick="location.href='/order/{{ order.id }}'"> -->
+                <tr>
+                    <th scope="row">{{ order.id }}</th>
+                    <th>{{ order.product }}</th>
+                    <th>{{ order.quantity|intcomma }} 개</th>
+                    <th>{{ order.register_date|date:'Y.m.d H:i' }}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<!-- </div><div class="row">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" onclick="location.href='/order/create/'">Create</button>
+    </div>
+</div> -->
+{% endblock %}
