@@ -50,7 +50,7 @@ class RegisterForm(forms.Form):
             )
             product.save()
         """
-        if not (name and price and description and stock):
+        if not (name and price and description and stock):  # You can pass error message seperately for each variable.
             self.add_error('name', 'There is no product name.')
             self.add_error('price', 'There is no price.')
             self.add_error('description', 'There is no description.')

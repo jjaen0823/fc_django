@@ -39,7 +39,7 @@ class ProductCreate(FormView):
         )
         product.save()
 
-        return super().form_valid(form)
+        return super().form_valid(form)  # overriding -> call super()
 
 
 class ProductDetail(DetailView):

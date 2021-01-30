@@ -40,30 +40,33 @@ class OrderCreate(FormView):
     success_url = '/product/'
 
     def form_valid(self, form):
-        quantity = int(form.data.get('quantity'))
+        quantity = form.data.get('quantity')
         product = form.data.get('product')
         fcuser = Fcuser.objects.get(email=self.request.session.get(
             'user'))  # 해당 fcuser 객체에 대한 pk 를 가지고 옴
 
-        if quantity < 0:
-            return redirect('/product/' + str(form.product))
+        if int(quantity) < 0:
+            return redirect('/product/' + str(product))
 
         with transaction.atomic():
             prod = Product.objects.get(pk=product)
+            if prod.stock is None:
+                return redirect('/product/' + str(product))
+
             order = Order(
                 quantity=quantity,
                 product=prod,
                 fcuser=fcuser,
             )
             order.save()
-            prod.stock -= quantity
+            prod.stock -= int(quantity)
             prod.save()
 
         return super().form_valid(form)
 
     def form_invalid(self, form):
         product = form.data.get('product')
-        return redirect('/product/' + str(form.product))
+        return redirect('/product/' + str(product))
 
     # FormView 안에서도 request를 전달할 수 있도록 만들어줘야 함
 
