@@ -2,12 +2,20 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
 
+from django.utils.decorators import method_decorator
+from fcuser.decorators import login_required
+
+from django.db import transaction
+
 from .forms import RegisterForm
 from .models import Order
+from fcuser.models import Fcuser
+from product.models import Product
 
 # Create your views here.
 
 
+@method_decorator(login_required, name='dispatch')
 class OrderList(ListView):
     template_name = 'order/order.html'
     # variable name to use in template(html)
@@ -21,12 +29,40 @@ class OrderList(ListView):
             fcuser__email=self.request.session.get('user'))
         return queryset
 
+    # url에 접근해서 ClassView를 호출할 때 불리는 함수가 dispatch이다
+    # @login_required
+    # def dispatch(self, request, *args, **kwargs): -> method_decoration 사용하면 class에 바로 적용 가능
 
+
+@method_decorator(login_required, name='dispatch')
 class OrderCreate(FormView):
     form_class = RegisterForm
     success_url = '/product/'
 
+    def form_valid(self, form):
+        quantity = int(form.data.get('quantity'))
+        product = form.data.get('product')
+        fcuser = Fcuser.objects.get(email=self.request.session.get(
+            'user'))  # 해당 fcuser 객체에 대한 pk 를 가지고 옴
+
+        if quantity < 0:
+            return redirect('/product/' + str(form.product))
+
+        with transaction.atomic():
+            prod = Product.objects.get(pk=product)
+            order = Order(
+                quantity=quantity,
+                product=prod,
+                fcuser=fcuser,
+            )
+            order.save()
+            prod.stock -= quantity
+            prod.save()
+
+        return super().form_valid(form)
+
     def form_invalid(self, form):
+        product = form.data.get('product')
         return redirect('/product/' + str(form.product))
 
     # FormView 안에서도 request를 전달할 수 있도록 만들어줘야 함

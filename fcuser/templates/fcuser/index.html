@@ -1,8 +1,21 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
+{% block content %}
 <h2>Hello!</h2>
-<a href="{% url 'register' %}">Register</a><br/>
-<a href="{% url 'login' %}">Login</a><br/>
+{% if request.session.user %}
+    <p>{{ email }}</p>
+    <a href="{% url 'logout' %}">Logout</a><br>
+    <!-- <div class="col-6">
+        <button type="button" class="btn btn-primaty btn-block" onclick="location.href='/logout/'">Logout</button>
+    </div> -->
+{% else %}
+    <a href="{% url 'register' %}">Register</a><br/>
+    <a href="{% url 'login' %}">Login</a><br>
+    <!-- <div class="col-6">
+        <button type="button" class="btn btn-primaty btn-block" onclick="location.href='/login/'">Login</button>
+    </div> -->
+{% endif %}
+
 <a href="{% url 'product' %}">Product List</a><br/>
 <a href="{% url 'order' %}">Order List</a><br>
-{{ email }} 
+
 {% endblock %}

@@ -14,6 +14,7 @@
                 <p style="color:red;">{{ error }}</p>
                 {% endif %}
         </div> {% endcomment %}
+        
         <form method="POST" action=".">
             {% csrf_token %}
             {% for field in form %}

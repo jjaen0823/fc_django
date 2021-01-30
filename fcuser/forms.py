@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import check_password
 from .models import Fcuser
 
 
@@ -28,6 +28,7 @@ class RegisterForm(forms.Form):
         label='re_Password'
     )
 
+    # overriding clean function: just check vaild ->  Do not modify the model directly.
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
@@ -38,13 +39,13 @@ class RegisterForm(forms.Form):
             if password != re_password:
                 # Add error message to re_password field.
                 self.add_error('re_password', 'Password is different!')
-            else:
+            """else:
                 # register code
                 fcuser = Fcuser(
                     email=email,
                     password=make_password(password)
                 )
-                fcuser.save()
+                fcuser.save()"""
 
 
 class LoginForm(forms.Form):
@@ -64,6 +65,7 @@ class LoginForm(forms.Form):
         label='Password'
     )
 
+    # overriding clean function
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
@@ -78,5 +80,3 @@ class LoginForm(forms.Form):
 
             if not check_password(password, fcuser.password):
                 self.add_error('password', 'Your Password is wrong!')
-            else:
-                self.email = fcuser.email

@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormView
 
+from django.utils.decorators import method_decorator
+from fcuser.decorators import admin_required
+
 from .models import Product
 from .forms import RegisterForm
 from order.forms import RegisterForm as OrderForm
@@ -17,10 +20,26 @@ class ProductList(ListView):
     context_object_name = 'product_list'
 
 
+@method_decorator(admin_required, name='dispatch')
 class ProductCreate(FormView):
     template_name = 'product/register_product.html'
     form_class = RegisterForm
     success_url = '/product/'
+
+    def form_valid(self, form):
+        name = form.data.get('name')
+        price = form.data.get('price')
+        description = form.data.get('description')
+        stock = form.data.get('stock')
+        product = Product(
+            name=name,
+            price=price,
+            description=description,
+            stock=stock,
+        )
+        product.save()
+
+        return super().form_valid(form)
 
 
 class ProductDetail(DetailView):

@@ -39,6 +39,7 @@ class RegisterForm(forms.Form):
         description = cleaned_data.get('description')
         stock = cleaned_data.get('stock')
 
+        """
         if name and price and description and stock:
             # register code
             product = Product(
@@ -48,3 +49,9 @@ class RegisterForm(forms.Form):
                 stock=stock,
             )
             product.save()
+        """
+        if not (name and price and description and stock):
+            self.add_error('name', 'There is no product name.')
+            self.add_error('price', 'There is no price.')
+            self.add_error('description', 'There is no description.')
+            self.add_error('stock', 'There is no stock.')
