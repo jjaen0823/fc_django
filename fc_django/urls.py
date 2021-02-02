@@ -19,6 +19,8 @@ from django.urls import path, include
 from fcuser.views import *
 # import fcuser.urls
 import product.urls
+from product.views import ProductListAPI
+
 import order.urls
 
 
@@ -30,4 +32,6 @@ urlpatterns = [
     path('logout/', logout, name='logout'),
     path('product/', include(product.urls)),
     path('order/', include(order.urls)),
+
+    path('api/product/', ProductListAPI.as_view()),
 ]

@@ -5,12 +5,27 @@ from django.views.generic.edit import FormView
 from django.utils.decorators import method_decorator
 from fcuser.decorators import admin_required
 
+from rest_framework import generics
+from rest_framework import mixins
+from .serializers import ProductSerializer
+
 from .models import Product
 from .forms import RegisterForm
 from order.forms import RegisterForm as OrderForm
 
 
 # Create your views here.
+
+
+class ProductListAPI(generics.GenericAPIView, mixins.ListModelMixin):
+    serializer_class = ProductSerializer
+
+    # overriding get_quaryset
+    def get_queryset(self):
+        return Product.objects.all().order_by('id')
+
+    def get(self, request, *args, **kwargs):  # 원하는 API를 직접 만들 수 있다
+        return self.list(request, *args, **kwargs)
 
 
 class ProductList(ListView):
