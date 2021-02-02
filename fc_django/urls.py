@@ -19,7 +19,7 @@ from django.urls import path, include
 from fcuser.views import *
 # import fcuser.urls
 import product.urls
-from product.views import ProductListAPI
+from product.views import ProductListAPI, ProductDetailAPI
 
 import order.urls
 
@@ -34,4 +34,5 @@ urlpatterns = [
     path('order/', include(order.urls)),
 
     path('api/product/', ProductListAPI.as_view()),
+    path('api/product/<int:pk>/', ProductDetailAPI.as_view()),
 ]

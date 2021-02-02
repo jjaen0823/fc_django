@@ -28,6 +28,17 @@ class ProductListAPI(generics.GenericAPIView, mixins.ListModelMixin):
         return self.list(request, *args, **kwargs)
 
 
+class ProductDetailAPI(generics.GenericAPIView, mixins.RetrieveModelMixin):
+    serializer_class = ProductSerializer
+
+    # overriding get_quaryset
+    def get_queryset(self):
+        return Product.objects.all().order_by('id')
+
+    def get(self, request, *args, **kwargs):  # 원하는 API를 직접 만들 수 있다
+        return self.retrieve(request, *args, **kwargs)
+
+
 class ProductList(ListView):
     model = Product
     template_name = 'product/product.html'
