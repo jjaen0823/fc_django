@@ -10,6 +10,14 @@ class Order(models.Model):
     product = models.ForeignKey(
         'product.Product', on_delete=models.CASCADE, verbose_name='Product')
     quantity = models.IntegerField(verbose_name='Product Quantity')
+    status = models.CharField(
+        choices=(  # select box
+            ('waiting', 'waiting'),
+            ('payment', 'payment'),
+            ('refund', 'refund'),
+        ),
+        default='waiting', max_length=32, verbose_name='Status')
+    memo = models.TextField(null=True, blank=True, verbose_name='Memo')
     register_date = models.DateTimeField(
         auto_now_add=True, verbose_name="Register Date")
 
