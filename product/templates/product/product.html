@@ -12,7 +12,7 @@
                 // $( "#weather-temp" ).html( "<strong>" + result + "</strong> degrees" );
                 $("#product-" + id).popover({
                     html: true,  // using html tag
-                    content: result.name + "<br>" + result.price + "<br>" + result.description + "<br>",
+                    content: result.name + "<br>" + result.price + "<br>" + result.description,
                 }).popover('show');
             }
         });
@@ -21,7 +21,6 @@
         $("#product-" + id).popover('hide');
     }
     $(document).ready(function () {
-        
     })
 </script>
 {% endblock %}
@@ -50,7 +49,7 @@
                 <!-- <tr onclick="location.href='/product/{{ product.id }}'"> -->
                 <tr>
                     <th scope="row">{{ product.id }}</th>
-                    <th ><a id="product-{{ product.id }}" onmouseenter="product_detail({{ product.id }});" onmouseleave="product_leave({{ product.id }})"
+                    <th ><a id="product-{{ product.id }}" onmouseenter="product_detail({{ product.id }});" onmouseleave="product_leave({{ product.id }});"
                         href="/product/{{ product.id }}">{{ product.name }}</a></th>
                     <th>{{ product.price|intcomma }} won</th>
                     <th>{{ product.stock }}</th>
