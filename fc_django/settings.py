@@ -49,6 +49,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,6 +62,8 @@ INSTALLED_APPS = [
     'fcuser.apps.FcuserConfig',
     'product.apps.ProductConfig',
     'order.apps.OrderConfig',
+
+    'baton.autodiscover',  # app을 자동으로 찾아서 관리해줌
 ]
 
 MIDDLEWARE = [
