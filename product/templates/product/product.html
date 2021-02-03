@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% block header %}
+<script>
+    function product_detail(id) {
+        $.ajax({
+            url: "/api/product/" + id,
+            // data: {
+            //     zipcode: 97201
+            // },
+            success: function( result ) {
+                // $( "#weather-temp" ).html( "<strong>" + result + "</strong> degrees" );
+                $("#product-" + id).popover({
+                    html: true,  // using html tag
+                    content: result.name + "<br>" + result.price + "<br>" + result.description + "<br>",
+                }).popover('show');
+            }
+        });
+    }
+    function product_leave(id) {
+        $("#product-" + id).popover('hide');
+    }
+    $(document).ready(function () {
+        
+    })
+</script>
+{% endblock %}
 {% block content %}
 <div class="row mt-5">
     <div class="col-12 text-center">
@@ -25,7 +50,8 @@
                 <!-- <tr onclick="location.href='/product/{{ product.id }}'"> -->
                 <tr>
                     <th scope="row">{{ product.id }}</th>
-                    <th ><a href="/product/{{ product.id }}">{{ product.name }}</a></th>
+                    <th ><a id="product-{{ product.id }}" onmouseenter="product_detail({{ product.id }});" onmouseleave="product_leave({{ product.id }})"
+                        href="/product/{{ product.id }}">{{ product.name }}</a></th>
                     <th>{{ product.price|intcomma }} won</th>
                     <th>{{ product.stock }}</th>
                     <th>{{ product.register_date|date:'Y.m.d H:i' }}</th>
