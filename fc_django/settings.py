@@ -47,6 +47,18 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+BATON = {
+    'SITE_HEADER': 'FC BACK OFFICE',
+    'SITE_TITLE': 'FC BACK OFFICE',
+    'INDEX_TITLE': 'FC ADMIN PAGE',
+    'SUPPORT_HREF': 'https://google.com',
+    # 'SUPPORT_HREF': 'mailto:poungki0823@gmail.com',
+    'COPYRIGHT': 'copyright © 2020 Fastcampus',
+    'POWERED_BY': '<a href="https://fastcampus.co.kr">Fastcampus</a>',
+    'MENU_TITLE': 'Fastcampus',
+
+}
+
 
 INSTALLED_APPS = [
     'baton',
@@ -59,7 +71,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'rest_framework',
 
-    'fcuser.apps.FcuserConfig',
+    'fcuser.apps.FcuserConfig',  # app 표기를 이름과 다르게 하려면 이렇게 해야함
     'product.apps.ProductConfig',
     'order.apps.OrderConfig',
 

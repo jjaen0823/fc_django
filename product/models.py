@@ -16,5 +16,5 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'fc_product'
-        verbose_name = 'product'
-        verbose_name_plural = 'product'
+        verbose_name = 'PRODUCT'
+        verbose_name_plural = 'PRODUCT'

@@ -20,5 +20,5 @@ class Fcuser(models.Model):
 
     class Meta:
         db_table = 'fc_fcuser'
-        verbose_name = 'fcuser'
-        verbose_name_plural = 'fcuser'
+        verbose_name = 'FCUSER'
+        verbose_name_plural = 'FCUSER'
