@@ -1,5 +1,11 @@
+from django.db.models import Q
+from django.db import transaction
+from django.contrib.admin.models import LogEntry, CHANGE
+from django.contrib.contenttypes.models import ContentType
+
 from django.contrib import admin
 from django.utils.html import format_html
+
 from django.contrib.humanize.templatetags.humanize import intcomma
 
 from .models import Product
@@ -7,10 +13,18 @@ from .models import Product
 
 # Register your models here.
 
+# def delete(modelAdmin, request, queryset):
+#     with transaction.atomic():
+#         qs = queryset.filter(~Q())
+
 
 class ProductAdmin(admin.ModelAdmin):
     list_filter = ('name',)
-    list_display = ('name', 'price_format', 'styled_stock')
+    list_display = ('name', 'price_format', 'styled_stock', 'action')
+    change_list_template = 'admin/product_delete_list.html'
+
+    def action(self, obj):
+        return format_html(f'<input type="button" value="delete" onclick="product_delete_submit({obj.id})" class="btn btn-primary btn-sm">')
 
     def styled_stock(self, obj):
         stock = intcomma(obj.stock)  # str
@@ -26,8 +40,18 @@ class ProductAdmin(admin.ModelAdmin):
     price_format.short_description = 'price'
 
     def changelist_view(self, request, extra_context=None):
-        #
         extra_context = {'title': 'Product List'}
+        #
+        if request.method == 'POST':
+            # button을 만들 때 id를 담아서 post해줘야 함
+            # print(request.POST)
+            obj_id = request.POST.get('obj_id')
+            if obj_id:
+                qs = Product.objects.filter(pk=obj_id)
+                ct = ContentType.objects.get_for_model(qs.model)
+                for obj in qs:
+                    obj.delete()
+
         return super().changelist_view(request, extra_context)
 
     # def changeform_view(self, request, object_id=None, form_url='', extra_context=None):

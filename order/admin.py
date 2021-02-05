@@ -1,10 +1,10 @@
 from django.db.models import Q  # F: 기존의 db에 들어있는 값에다가 변경할 때 사용한다.
+from django.db import transaction
 from django.contrib.admin.models import LogEntry, CHANGE
 from django.contrib.contenttypes.models import ContentType
 
 from django.contrib import admin
 from django.utils.html import format_html
-from django.db import transaction
 
 from .models import Order
 
@@ -14,7 +14,6 @@ from .models import Order
 def refund(modelAdmin, request, queryset):  # queryset에는 admin에서 체크한 객체들이 들어옴
     with transaction.atomic():
         qs = queryset.filter(~Q(status='refund'))  # queryset 응용
-
         # model type을 알려줘야 함
         ct = ContentType.objects.get_for_model(queryset.model)
         for obj in qs:
@@ -61,7 +60,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', )  # tuple
     # using function_name in list_display
     list_display = ('fcuser', 'product', 'quantity', 'styled_status', 'action')
-    # change_list_template = 'admin/order_change_list.html'
+    change_list_template = 'admin/order_change_list.html'
 
     # actions에 등록되어 있는 함수에 필요한 parameter를 전달해줌
     actions = [
@@ -70,7 +69,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     def action(self, obj):
         if obj.status != 'refund':
-            return format_html('<input type="button" class="btn btn-primary btn-sm" value="refund">')
+            return format_html(f'<input type="button" value="refund" onclick="order_refund_submit({obj.id})" class="btn btn-primary btn-sm">')
         else:
             return
 
@@ -94,17 +93,34 @@ class OrderAdmin(admin.ModelAdmin):
         extra_context = {'title': 'Order List'}
         #
         if request.method == 'POST':
-            pass
             # button을 만들 때 id를 담아서 post해줘야 함
+            # print(request.POST)
+            obj_id = request.POST.get('obj_id')
+            if obj_id:
+                qs = Order.objects.filter(pk=obj_id)
+                ct = ContentType.objects.get_for_model(qs.model)
+                for obj in qs:
+                    obj.product.stock += obj.quantity
+                    obj.product.save()
+
+                    LogEntry.objects.log_action(
+                        user_id=request.user.id,
+                        content_type_id=ct.pk,
+                        object_id=obj.pk,
+                        object_repr=f'{obj.fcuser.email} refund',
+                        action_flag=CHANGE,
+                        change_message='refund',
+                    )
+                qs.update(status='refund')
 
         return super().changelist_view(request, extra_context)
 
-    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
-        order = Order.objects.get(pk=object_id)  # 예외처리 따로 하지 않음
-        extra_context = {
-            'title': f"'{order.fcuser.email}'의 '{order.product.name}' Order Update"
-        }
-        return super().changeform_view(request, object_id, form_url, extra_context)
+    # def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+    #     order = Order.objects.get(pk=object_id)  # 예외처리 따로 하지 않음
+    #     extra_context = {
+    #         'title': f"'{order.fcuser.email}'의 '{order.product.name}' Order Update"
+    #     }
+    #     return super().changeform_view(request, object_id, form_url, extra_context)
 
 
 admin.site.register(Order, OrderAdmin)
