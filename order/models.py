@@ -26,5 +26,5 @@ class Order(models.Model):
 
     class Meta:
         db_table = 'fc_order'
-        verbose_name = 'ORDER'
-        verbose_name_plural = 'ORDER'
+        verbose_name = 'order'
+        verbose_name_plural = 'order'
