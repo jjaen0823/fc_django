@@ -54,10 +54,14 @@ class ProductAdmin(admin.ModelAdmin):
 
         return super().changelist_view(request, extra_context)
 
-    # def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
-    #     product = Product.objects.get(pk=object_id)  # 예외처리 따로 하지 않음
-    #     extra_context = {'title': f'{product.name} Update'}
-    #     return super().changeform_view(request, object_id, form_url, extra_context)
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        product = Product.objects.get(pk=object_id)  # 예외처리 따로 하지 않음
+        extra_context = {
+            'title': f'{product.name} Update'
+        }
+        extra_context['show_save_and_add_another'] = False
+        extra_context['show_save_and_continue'] = False
+        return super().changeform_view(request, object_id, form_url, extra_context)
 
 
 admin.site.register(Product, ProductAdmin)

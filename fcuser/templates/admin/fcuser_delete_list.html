@@ -1,0 +1,13 @@
+{% extends "admin/change_list.html" %}
+{% load humanize %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+    function fcuser_delete_submit(obj_id) {
+        jQuery('#changelist-form').append('<input type="hidden" name="obj_id" value="' + obj_id + '">');
+        jQuery('#changelist-form').submit();
+    }
+</script>
+{% endblock %}

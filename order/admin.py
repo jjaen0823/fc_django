@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 
 from django.contrib import admin
 from django.utils.html import format_html
+from django.template.response import TemplateResponse
+from django.urls import path
 
 from .models import Order
 
@@ -61,6 +63,7 @@ class OrderAdmin(admin.ModelAdmin):
     # using function_name in list_display
     list_display = ('fcuser', 'product', 'quantity', 'styled_status', 'action')
     change_list_template = 'admin/order_change_list.html'
+    change_form_template = 'admin/order_change_form.html'
 
     # actions에 등록되어 있는 함수에 필요한 parameter를 전달해줌
     actions = [
@@ -115,12 +118,26 @@ class OrderAdmin(admin.ModelAdmin):
 
         return super().changelist_view(request, extra_context)
 
-    # def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
-    #     order = Order.objects.get(pk=object_id)  # 예외처리 따로 하지 않음
-    #     extra_context = {
-    #         'title': f"'{order.fcuser.email}'의 '{order.product.name}' Order Update"
-    #     }
-    #     return super().changeform_view(request, object_id, form_url, extra_context)
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        order = Order.objects.get(pk=object_id)  # 예외처리 따로 하지 않음
+        extra_context = {
+            'title': f"'{order.fcuser.email}'의 '{order.product.name}' Order Update"
+        }
+        extra_context['show_save_and_add_another'] = False
+        extra_context['show_save_and_continue'] = False
+        return super().changeform_view(request, object_id, form_url, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        date_urls = [
+            path('date_view/', self.date_view, name='date_view'),
+        ]
+        return date_urls + urls
+
+    def date_view(self, request):
+        context = dict()
+
+        return TemplateResponse(request, 'admin/order_date_view.html', context)
 
 
 admin.site.register(Order, OrderAdmin)
