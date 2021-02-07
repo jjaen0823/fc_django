@@ -4,52 +4,52 @@
 {% block breadcrumbs %}
 <div class="breadcrumbs">
 <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-&rsaquo; <a href="{% url 'admin:app_list' app_label='order' %}">Order</a>
-&rsaquo; Order
+&rsaquo; <a href="{% url 'admin:app_list' app_label='fcuser' %}">Fcuser</a>
+&rsaquo; Fcuser
 </div>
 {% endblock %}
 
 {% block content %}
 <div id="content-main" class="p-5"> <!-- p-5: padding-->
-    <a class="btn btn-primary mb-4" href="/admin/order/order/">Back</a>
-    <h3>Order List: Last Week</h3>
+    <a class="btn btn-primary mb-4" href="/admin/fcuser/fcuser/">Back</a>
+    <h3>Fcuser List: Last Week</h3>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>User</th>
-                <th>Product</th>
-                <th>Quantity</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Level</th>
                 <th>Register Date</th>
             </tr>
         </thead>
         <tbody>
             {% for d in week_data %}
             <tr>
-                <td>{{ d.fcuser }}</td>
-                <td>{{ d.product }}</td>
-                <td>{{ d.quantity }}</td>
+                <td>{{ d.email }}</td>
+                <td>{{ d.password }}</td>
+                <td>{{ d.level }}</td>
                 <td>{{ d.register_date }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <br>
-    <h3>Order List: Few Weeks Ago</h3>
+    <h3>Fcuser List: Few Weeks Ago</h3>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>User</th>
-                <th>Product</th>
-                <th>Quantity</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Level</th>
                 <th>Register Date</th>
             </tr>
         </thead>
         <tbody>
             {% for d in data %}
             <tr>
-                <td>{{ d.fcuser }}</td>
-                <td>{{ d.product }}</td>
-                <td>{{ d.quantity }}</td>
+                <td>{{ d.email }}</td>
+                <td>{{ d.password }}</td>
+                <td>{{ d.level }}</td>
                 <td>{{ d.register_date }}</td>
             </tr>
             {% endfor %}

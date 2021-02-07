@@ -8,6 +8,8 @@ from django.utils.html import format_html
 from django.template.response import TemplateResponse
 from django.urls import path
 
+import datetime
+
 from .models import Order
 
 # Register your models here.
@@ -130,12 +132,19 @@ class OrderAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         date_urls = [
-            path('date_view/', self.date_view, name='date_view'),
+            path('date_view/', self.date_view),
         ]
         return date_urls + urls
 
     def date_view(self, request):
-        context = dict()
+        week_date = datetime.datetime.now() - datetime.timedelta(days=7)
+        week_data = Order.objects.filter(register_date__gte=week_date)
+        data = Order.objects.filter(register_date__lt=week_date)
+        context = dict(
+            self.admin_site.each_context(request),
+            week_data=week_data,
+            data=data,
+        )
 
         return TemplateResponse(request, 'admin/order_date_view.html', context)
 

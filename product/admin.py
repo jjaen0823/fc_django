@@ -8,6 +8,10 @@ from django.utils.html import format_html
 
 from django.contrib.humanize.templatetags.humanize import intcomma
 
+from django.urls import path
+from django.template.response import TemplateResponse
+import datetime
+
 from .models import Product
 
 
@@ -21,10 +25,10 @@ from .models import Product
 class ProductAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     list_display = ('name', 'price_format', 'styled_stock', 'action')
-    change_list_template = 'admin/product_delete_list.html'
+    change_list_template = 'admin/product_change_list.html'
 
     def action(self, obj):
-        return format_html(f'<input type="button" value="delete" onclick="product_delete_submit({obj.id})" class="btn btn-primary btn-sm">')
+        return format_html(f'<input type="button" value="delete" onclick="product_change_submit({obj.id})" class="btn btn-primary btn-sm">')
 
     def styled_stock(self, obj):
         stock = intcomma(obj.stock)  # str
@@ -62,6 +66,26 @@ class ProductAdmin(admin.ModelAdmin):
         extra_context['show_save_and_add_another'] = False
         extra_context['show_save_and_continue'] = False
         return super().changeform_view(request, object_id, form_url, extra_context)
+
+    def get_urls(self):
+        urls = super().get_urls()
+        date_urls = [
+            path('date_view/', self.date_view),
+        ]
+        return date_urls + urls
+
+    def date_view(self, request):
+        week_date = datetime.datetime.now() - datetime.timedelta(days=7)
+        week_data = Product.objects.filter(register_date__gte=week_date)
+        data = Product.objects.filter(register_date__lt=week_date)
+
+        context = dict(
+            self.admin_site.each_context(request),
+            week_data=week_data,
+            data=data,
+        )
+
+        return TemplateResponse(request, 'admin/product_date_view.html', context)
 
 
 admin.site.register(Product, ProductAdmin)

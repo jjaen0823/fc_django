@@ -5,9 +5,17 @@
 {% block extrahead %}
 {{ block.super }}
 <script>
-    function product_delete_submit(obj_id) {
+    function product_change_submit(obj_id) {
         jQuery('#changelist-form').append('<input type="hidden" name="obj_id" value="' + obj_id + '">');
         jQuery('#changelist-form').submit();
     }
 </script>
+{% endblock %}
+
+
+{% block object-tools-items %}
+<li>
+    <a class="btn btn-primary" href="/admin/product/product/date_view/">Date View</a>
+</li>
+{{ block.super }}
 {% endblock %}
