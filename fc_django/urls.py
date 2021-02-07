@@ -14,18 +14,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+
+from django.views.generic import TemplateView
 
 from fcuser.views import *
 # import fcuser.urls
 import product.urls
-from product.views import ProductListAPI, ProductDetailAPI
-
+from product.views import (
+    ProductListAPI, ProductDetailAPI
+)
 import order.urls
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    re_path(r'^admin/manual/$',
+            TemplateView.as_view(
+                template_name='admin/manual.html',
+                extra_context={'title': 'Manual', 'site_title': 'fastcampus jjaen',
+                               'site_header': 'Fastcampus jjaen'},
+            )
+            ),
+
     path('baton/', include('baton.urls')),
 
     path('', index, name='index'),

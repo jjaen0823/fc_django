@@ -67,6 +67,6 @@ class FcuserAdmin(admin.ModelAdmin):
 admin.site.register(Fcuser, FcuserAdmin)
 
 # admin theme
-admin.site.site_header = 'fastcampus jjaen'
-admin.site.index_title = 'fastcampus admin'
+admin.site.site_header = 'Fastcampus jjaen'
+admin.site.index_title = 'Fastcampus Admin'
 admin.site.site_title = 'fastcampus jjaen'
