@@ -19,6 +19,8 @@ from django.template.response import TemplateResponse
 
 from django.views.generic import TemplateView
 
+import datetime
+
 from fcuser.views import *
 # import fcuser.urls
 import product.urls
@@ -26,14 +28,20 @@ from product.views import (
     ProductListAPI, ProductDetailAPI
 )
 import order.urls
+from order.models import Order
 
 
 orig_index = admin.site.index
 
 
 def fc_index(request, extra_context=None):
-    extra_context = {'test': 'test'}
-    # return TemplateResponse(request, 'admin/index.html', extra_context)
+    base_date = datetime.datetime.now() - datetime.timedelta(days=7)
+    order_date = {}
+    for idx in range(7):
+        target_date = base_date + datetime.timedelta(days=i)
+        date_key = target_date.strftime('%Y-%m-%d')
+
+        # return TemplateResponse(request, 'admin/index.html', extra_context)
     return orig_index(request, extra_context)
 
 

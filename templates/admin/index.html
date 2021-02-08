@@ -1,6 +1,13 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
 
+{% block extrahead %}
+{{ block.super}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" 
+    integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" 
+    crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
@@ -15,9 +22,38 @@
 <!-- <div id="content-main">
   {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
 </div> -->
-aedfasdfadfgadf
-<p>{{test}}</p>
+<div id="content-main" class="p-5">
+    <h4>Order Status</h4>
+    <canvas id="orderChart"></canvas>
+</div>
+<script>
+    var ctx = document.getElementById('orderChart');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['test1', 'test2', 'test3'],
+            datasets: [{
+                label: 'Number of orders',
+                data: [10, 20, 30],
+                borderWidth: 1,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'red'
+                
 
+            }],
+            
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
 {% endblock %}
 
 {% block sidebar %}
