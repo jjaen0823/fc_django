@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.template.response import TemplateResponse
 
 from django.views.generic import TemplateView
 
@@ -25,6 +26,18 @@ from product.views import (
     ProductListAPI, ProductDetailAPI
 )
 import order.urls
+
+
+orig_index = admin.site.index
+
+
+def fc_index(request, extra_context=None):
+    extra_context = {'test': 'test'}
+    # return TemplateResponse(request, 'admin/index.html', extra_context)
+    return orig_index(request, extra_context)
+
+
+admin.site.index = fc_index
 
 
 urlpatterns = [

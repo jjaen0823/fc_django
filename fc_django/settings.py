@@ -56,6 +56,54 @@ BATON = {
     'COPYRIGHT': 'copyright © 2020 Fastcampus',
     'POWERED_BY': '<a href="https://fastcampus.co.kr">Fastcampus</a>',
     'MENU_TITLE': 'Fastcampus',
+    'MENU': (
+        {'type': 'title', 'label': 'main', 'apps': (
+            'fcuser', 'order', 'product')},
+        {
+            'type': 'app',
+            'name': 'fcuser',
+            'label': 'Fcuser',
+            'icon': 'fa fa-lock',
+            'models': (
+                {
+                    'name': 'fcuser',
+                    'label': 'FcUsers'
+                },
+            )
+        },
+        # {
+        #     'type': 'app',
+        #     'name': 'order',
+        #     'label': 'Order',
+        #     'models': (
+        #         {
+        #             'name': 'order',
+        #             'label': 'Orders'
+        #         },
+        #     )
+        # },
+        {'type': 'free', 'label': 'Order', 'default_open': True, 'children': [
+            # {'type': 'model', 'label': 'Order', 'name': 'order', 'app': 'order'},
+            {'type': 'free', 'label': 'Order',
+                'url': '/admin/order/order/'},
+            {'type': 'free', 'label': 'Order date view',
+                'url': '/admin/order/order/date_view'},
+        ]
+        },
+        {
+            'type': 'app',
+            'name': 'product',
+            'label': 'Product',
+            'models': (
+                {
+                    'name': 'product',
+                    'label': 'Products'
+                },
+            )
+        },
+
+        {'type': 'free', 'label': 'Manual', 'url': '/admin/manual'},
+    ),
 
 }
 
