@@ -25,16 +25,25 @@
 <div id="content-main" class="p-5">
     <h4>Order Status</h4>
     <canvas id="orderChart"></canvas>
+    <!-- <h4>Current Exchange Rate</h4><br> -->
+    <h5>Dollar Exchange Rate: {{ exchange }}</h5>
 </div>
 <script>
     var ctx = document.getElementById('orderChart');
+    var labels = [];
+    var data = [];
+    {% for key, val in orders.items %}
+        labels.push('{{ key }}');
+        data.push({{ val }});
+    {% endfor %}
     var chart = new Chart(ctx, {
-        type: 'bar',
+        // type: 'bar',
+        type: 'horizontalBar',
         data: {
-            labels: ['test1', 'test2', 'test3'],
+            labels: labels,
             datasets: [{
                 label: 'Number of orders',
-                data: [10, 20, 30],
+                data: data,
                 borderWidth: 1,
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'red'
@@ -47,7 +56,8 @@
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        stepSize: 1,
                     }
                 }]
             }

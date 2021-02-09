@@ -30,18 +30,30 @@ from product.views import (
 import order.urls
 from order.models import Order
 
+from .functions import get_exchange
+
 
 orig_index = admin.site.index
 
 
 def fc_index(request, extra_context=None):
     base_date = datetime.datetime.now() - datetime.timedelta(days=7)
-    order_date = {}
+    order_data = {}
     for idx in range(7):
-        target_date = base_date + datetime.timedelta(days=i)
-        date_key = target_date.strftime('%Y-%m-%d')
+        target_dttm = base_date + datetime.timedelta(days=idx)
+        date_key = target_dttm.strftime('%Y-%m-%d')
+        target_date = datetime.date(
+            target_dttm.year, target_dttm.month, target_dttm.day)
+        order_cnt = Order.objects.filter(
+            register_date__date=target_date).count()
+        order_data[date_key] = order_cnt
 
-        # return TemplateResponse(request, 'admin/index.html', extra_context)
+    extra_context = {
+        'orders': order_data,
+        'exchange': get_exchange()
+    }
+
+    # return TemplateResponse(request, 'admin/index.html', extra_context)
     return orig_index(request, extra_context)
 
 
